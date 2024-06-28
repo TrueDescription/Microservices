@@ -1,0 +1,15 @@
+# Use an official Java runtime as a parent image
+FROM openjdk:17-jdk-alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Create the directory structure according to the package name
+RUN mkdir -p ProductService
+
+# Copy the compiled classes and libraries into the correct directory
+COPY ./compiled/ProductService /app/ProductService
+COPY ./compiled/config.json /app/config.json
+
+# Ensure all JAR files and the ProductService directory are in the classpath
+CMD ["java", "-cp", "/app/*:/app/ProductService/*.jar", "ProductService.ProductService"]

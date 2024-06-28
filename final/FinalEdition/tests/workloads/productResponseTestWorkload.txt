@@ -1,0 +1,4 @@
+PRODUCT create 12 create test 1.1 2
+USER create 123 <username> <email> <password>
+ORDER place 12 123 1
+shutdown

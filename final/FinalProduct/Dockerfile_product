@@ -1,0 +1,11 @@
+FROM openjdk:17-jdk-alpine
+
+WORKDIR /app
+
+RUN mkdir -p ProductService
+
+COPY ./compiled/ProductService /app/ProductService
+COPY ./compiled/config.json /app/config.json
+
+# CMD ["java", "-cp", ".:./ProductService/*", "ProductService.ProductService"]
+CMD ["java", "-cp", ".:./ProductService/*", "ProductService.ProductService", "15003"]

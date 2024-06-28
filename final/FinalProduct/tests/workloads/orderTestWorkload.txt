@@ -1,0 +1,1 @@
+ORDER place <product_id> <user_id> <quantity>

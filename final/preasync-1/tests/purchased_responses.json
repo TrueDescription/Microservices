@@ -1,0 +1,8 @@
+{
+    "user_post_200_wipe": {
+        "command": "restart"
+    },
+    "user_post_200_kill": {
+        "command": "shutdown"
+    }
+}

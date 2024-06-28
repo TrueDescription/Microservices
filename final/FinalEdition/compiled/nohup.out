@@ -1,0 +1,50 @@
+Starting UserService...
+
+Starting ProductService...
+
+Starting OrderService...
+
+java.lang.NullPointerException
+	at UserService.UserService.create(UserService.java:258)
+	at UserService.UserService$userHandler.handle(UserService.java:373)
+	at jdk.httpserver/com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:77)
+	at jdk.httpserver/sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:82)
+	at jdk.httpserver/com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:80)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:848)
+	at jdk.httpserver/com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:77)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:817)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:201)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:560)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:526)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Starting UserService...
+
+Starting ProductService...
+
+Starting OrderService...
+
+org.postgresql.util.PSQLException: ERROR: relation "userspurchased" already exists
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2725)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2412)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:371)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:502)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:419)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:341)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:326)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:302)
+	at org.postgresql.jdbc.PgStatement.executeUpdate(PgStatement.java:275)
+	at OrderService.OrderService.createProductsTable(OrderService.java:84)
+	at OrderService.OrderService.main(OrderService.java:53)
+java.lang.NullPointerException
+	at UserService.UserService.create(UserService.java:258)
+	at UserService.UserService$userHandler.handle(UserService.java:373)
+	at jdk.httpserver/com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:77)
+	at jdk.httpserver/sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:82)
+	at jdk.httpserver/com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:80)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:848)
+	at jdk.httpserver/com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:77)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:817)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:201)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:560)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:526)
+	at java.base/java.lang.Thread.run(Thread.java:829)

@@ -1,0 +1,82 @@
+import orjson
+import sys
+from flask import Flask, request, Response
+import asyncio
+import aiohttp
+from threading import Lock
+
+CONFIG_PATH = "config.json"
+app = Flask(__name__)
+
+# Lists to hold service instances
+user_services = []
+product_services = []
+
+# Locks for thread-safe operations on the service lists
+user_services_lock = Lock()
+product_services_lock = Lock()
+
+# Current index for round-robin selection
+current_user_service_index = 0
+current_product_service_index = 0
+
+async def fetch(session, method, url, **kwargs):
+    # Fetch function remains unchanged
+    ...
+
+@app.route('/register/user', methods=['POST'])
+def register_user_service():
+    global current_user_service_index
+    data = request.get_json()
+    with user_services_lock:
+        user_services.append(f"http://{data['ip']}:{data['port']}")
+    return {"message": "User service registered successfully"}, 200
+
+@app.route('/register/product', methods=['POST'])
+def register_product_service():
+    global current_product_service_index
+    data = request.get_json()
+    with product_services_lock:
+        product_services.append(f"http://{data['ip']}:{data['port']}")
+    return {"message": "Product service registered successfully"}, 200
+
+def get_next_user_service_url():
+    global current_user_service_index
+    with user_services_lock:
+        if not user_services:
+            raise Exception("No user services registered")
+        url = user_services[current_user_service_index]
+        current_user_service_index = (current_user_service_index + 1) % len(user_services)
+    return url
+
+def get_next_product_service_url():
+    global current_product_service_index
+    with product_services_lock:
+        if not product_services:
+            raise Exception("No product services registered")
+        url = product_services[current_product_service_index]
+        current_product_service_index = (current_product_service_index + 1) % len(product_services)
+    return url
+
+# Modify existing routes to use load balancer
+@app.route('/user/<string:id>', methods=['GET'])
+async def handle_user_get(id):
+    # Use get_next_user_service_url() to select the next service
+    ...
+
+@app.route('/user', methods=['POST'])
+async def handle_user_post():
+    # Use get_next_user_service_url() to select the next service
+    ...
+
+@app.route('/product/<string:id>', methods=['GET'])
+async def handle_product_get(id):
+    # Use get_next_product_service_url() to select the next service
+    ...
+
+@app.route('/product', methods=['POST'])
+async def handle_product_post():
+    # Use get_next_product_service_url() to select the next service
+    ...
+
+# Main function and other routes remain unchanged

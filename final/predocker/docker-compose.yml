@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: examplepassword
+      POSTGRES_USER: exampleuser
+      POSTGRES_DB: exampledb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    restart: always
+    ports:
+      - "14002:14002"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      
+volumes:
+  postgres_data:

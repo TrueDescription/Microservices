@@ -1,0 +1,11 @@
+FROM openjdk:17-jdk-alpine
+
+WORKDIR /app
+
+RUN mkdir -p OrderService
+
+COPY ./compiled/OrderService /app/OrderService
+COPY ./compiled/config.json /app/config.json
+
+CMD ["java", "-cp", ".:./OrderService/*", "OrderService.OrderService", "14003"]
+# CMD ["java", "-cp", ".:./OrderService/*", "OrderService.OrderService"]

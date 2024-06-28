@@ -1,0 +1,10 @@
+{
+    
+    "user_get_200_1009": {
+        "2011": 20
+    },
+    "user_get_404_1000": {},
+    "user_get_404_1001": {},
+    "user_get_400_invalid_type":{},
+    "user_get_404,400_invalid_id": {}
+}

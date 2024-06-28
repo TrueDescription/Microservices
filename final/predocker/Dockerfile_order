@@ -1,0 +1,16 @@
+FROM openjdk:17-jdk-alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Create the directory structure according to the package name
+RUN mkdir -p OrderService
+
+# Copy the compiled classes and libraries into the correct directory
+COPY ./compiled/OrderService /app/OrderService
+COPY ./compiled/config.json /app/config.json
+
+# Ensure all JAR files and the OrderService directory are in the classpath
+CMD ["java", "-cp", "/app/*:/app/OrderService/*.jar", "OrderService.OrderService"]
+
+# java -cp /app/*:/app/OrderService/*.jar OrderService

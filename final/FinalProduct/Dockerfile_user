@@ -1,0 +1,12 @@
+FROM openjdk:17-jdk-alpine
+
+WORKDIR /app
+
+RUN mkdir -p UserService
+
+COPY ./compiled/UserService /app/UserService
+COPY ./compiled/config.json /app/config.json
+
+# CMD ["java", "-cp", ".:./UserService/*", "UserService.UserService"]
+CMD ["java", "-cp", ".:./UserService/*", "UserService.UserService", "13999"]
+

@@ -1,0 +1,92 @@
+import json
+import sys
+from flask import Flask, request
+import asyncio
+import aiohttp
+
+CONFIG_PATH = "config.json"
+
+USURL = ""
+PSURL = ""
+USIP = ""
+USP = ""
+PSIP = ""
+PSP = ""
+
+app = Flask(__name__)
+
+async def fetch(session, method, url, **kwargs):
+    async with session.request(method, url, **kwargs) as response:
+        return await response.json(), response.status
+
+@app.route('/user/<string:id>', methods=['GET'])
+async def handle_user_get(id):
+    async with aiohttp.ClientSession() as session:
+        if request.method == 'GET':
+            url = f"{USURL}/{id}"
+            response, status = await fetch(session, 'get', url)
+            return response, status
+
+@app.route('/user', methods=['POST'])
+async def handle_user_post():
+    async with aiohttp.ClientSession() as session:
+        if request.method == 'POST':
+            url = USURL
+            response, status = await fetch(session, 'post', url, json=request.json)
+            return response, status
+
+@app.route('/product/<string:id>', methods=['GET'])
+async def handle_product_get(id):
+    async with aiohttp.ClientSession() as session:
+        if request.method == 'GET':
+            url = f"{PSURL}/{id}"
+            response, status = await fetch(session, 'get', url)
+            return response, status
+
+@app.route('/product', methods=['POST'])
+async def handle_product_post():
+    async with aiohttp.ClientSession() as session:
+        if request.method == 'POST':
+            url = PSURL
+            response, status = await fetch(session, 'post', url, json=request.json)
+            return response, status
+
+@app.route('/', methods=['POST'])
+async def handle_kill_post():
+    async with aiohttp.ClientSession() as session:
+        if request.method == 'POST':
+            json_data = request.json
+            if json_data.get('command') == 'shutdown' or json_data.get('command') == 'restart':
+                url = f"http://{USIP}:{USP}"
+                url2 = f"http://{PSIP}:{PSP}"
+                task1 = fetch(session, 'post', url, json=json_data)
+                task2 = fetch(session, 'post', url2, json=json_data)
+                responses = await asyncio.gather(task1, task2)
+                return responses[0]  # Assuming both responses are similar
+
+def main(argv: list):
+    try:
+        with open(CONFIG_PATH, 'r',  encoding='utf-8') as config:
+            config_data = json.load(config)
+    except FileNotFoundError:
+        print(f"Error: File '{CONFIG_PATH}' not found.")
+        return -1
+    except json.JSONDecodeError:
+        print(f"Error: JSON failed to parse {CONFIG_PATH}")
+        return -1
+
+    global USIP, USP, PSIP, PSP, USURL, PSURL
+    USIP = config_data["UserService"].get("ip")
+    USP = config_data["UserService"].get("port")
+    PSIP = config_data["ProductService"].get("ip")
+    PSP = config_data["ProductService"].get("port")
+
+    USURL = f"http://{USIP}:{USP}/user"
+    PSURL = f"http://{PSIP}:{PSP}/product"
+    iscs_service_ip = config_data["InterServiceCommunication"].get("ip")
+    iscs_service_port = config_data["InterServiceCommunication"].get("port")
+
+    app.run(debug=True, port=iscs_service_port)
+
+if __name__ == "__main__":
+    main(sys.argv)

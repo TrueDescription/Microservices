@@ -1,0 +1,15 @@
+FROM openjdk:17-jdk-alpine
+
+WORKDIR /app
+
+RUN mkdir -p UserService
+# Copy the entire compiled service directory (including all dependencies and compiled classes)
+
+# Copy the compiled classes and libraries into the correct directory
+COPY ./compiled/UserService /app/UserService
+COPY ./compiled/config.json /app/config.json
+
+
+# Assuming UserService.class is in a package named UserService,
+# and the main method is in UserService.class
+CMD ["java", "-cp", "/app/*:/app/UserService/*.jar", "UserService.UserService"]
